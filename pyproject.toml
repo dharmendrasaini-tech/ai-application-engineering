@@ -1,0 +1,9 @@
+[project]
+name = "ai-application-engineering"
+version = "0.1.0"
+description = "My AI Application Engineering learning repository"
+requires-python = ">=3.14"
+
+dependencies = [
+    "requests>=2.34,<3",
+]
