@@ -593,6 +593,476 @@ task2.category = "high"
 
 
 
+#Variation 2
+
+
+# Exercise 1 - Student
+# Goal: practice class creation, initialization, independent object state, controlled mutation, validation, and a simple read-only summary method.
+# •	Class: Student
+# •	Instance state: name, score
+# •	Method: add_score(points)
+# •	Method: get_summary()
+# Rules:
+# •	name must not be blank after trimming whitespace.
+# •	score must not be negative.
+# •	add_score(points) accepts only positive points; otherwise raise ValueError.
+# •	get_summary() returns: "<name>: <score>".
+# Minimum tests: two independent students; valid score increase; zero points; negative points; blank name; negative initial score.
+# Design questions before coding
+# •	Which attributes are instance attributes?
+# •	What invariant should always hold for score?
+# •	Does get_summary mutate the object?
+
+class Student:
+    def __init__(self,name,score):
+
+        if not name.strip():
+            raise ValueError("Name cannot be blank.")
+        
+        
+        self.name = name.strip()
+
+        if score < 0:
+            raise ValueError("Score cannot be negative.")
+        
+        self.score = score
+
+    def add_score(self,points):
+
+        if points <= 0:
+            raise ValueError("Points must be positive.")
+     
+        self.score += points
+
+    def get_summary(self):
+        return f"{self.name}:{self.score}"
+
+
+student1 = Student("Dharm",100)
+student2 = Student("Ravi", 99)
+student3 = Student("", 23)
+student4 = Student("Rohit", -12)
+
+student1.add_score(23)
+
+student2.add_score(0)
+
+student1.add_score(-12)
+
+
+# Design questions before coding
+# •	Which attributes are instance attributes?
+# •	What invariant should always hold for score?
+# •	Does get_summary mutate the object?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Exercise 2 - BankAccount
+# Goal: practice state transitions and preserving invariants during mutation.
+# •	Class: BankAccount
+# •	Instance state: owner, balance
+# •	Methods: deposit(amount), withdraw(amount), get_balance()
+# Rules:
+# •	owner must not be blank.
+# •	initial balance must be >= 0.
+# •	deposit amount must be positive.
+# •	withdraw amount must be positive and cannot exceed the current balance.
+# •	Invalid operations must not change the balance.
+# Minimum tests: deposit; full-balance withdrawal; over-withdrawal; zero/negative deposit; zero/negative withdrawal; two accounts with independent balances.
+# Design questions before coding
+# •	What is the balance invariant?
+# •	Which checks must happen before balance mutation?
+# •	Should get_balance change any state?
+
+
+class BankAccount:
+    def __init__(self,owner,balance):
+
+        if not owner.strip():
+            raise ValueError("Ower cannot be blank.")
+
+        if balance < 0:
+            raise ValueError("Balance must be positive.")
+
+        
+        self.owner = owner.strip()
+        self.balance = balance
+
+    def deposit_amount(self,deposit_amount):
+
+        if self.deposit_amount < 0:
+            raise ValueError("Deposit_amount must be positive")
+        self.balance += deposit_amount
+
+    def withdraw_amount(self,withdraw_amount):
+
+        if withdraw_amount < 0:
+            raise ValueError("Withdraw amount must be positive.")
+
+        if withdraw_amount < self.balance:
+            raise ValueError("Insufficient balance")
+
+
+        self.balance -= withdraw_amount
+
+    def get_balance(self):
+        return self.balance
+
+                        
+
+owner1 = BankAccount("Ajay",1000)
+owner2 = BankAccount("Robin", 2000)
+
+
+owner1.deposit_amount(1000)
+
+owner2.withdraw_amount(2000)
+
+owner2.withdraw_amount(4000)
+
+owner1.deposit_amount(0)
+owner1.deposit_amount(-1)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Exercise 3 - Book
+# Goal: model progress while protecting a boundary invariant.
+# •	Class: Book
+# •	Instance state: title, author, pages, current_page
+# •	Methods: read(page_count), get_progress()
+# Rules:
+# •	title and author must not be blank.
+# •	pages must be a positive integer.
+# •	current_page starts at 0.
+# •	read(page_count) requires a positive integer.
+# •	current_page must never exceed pages.
+# •	Choose and document one policy for reading beyond the final page: reject the operation or cap at the final page. Be consistent.
+# •	get_progress() should return useful current progress without mutating the book.
+# Minimum tests: new book; partial reading; reading to final page; attempt beyond final page; zero/negative page count; independent books.
+# Design questions before coding
+# •	Write the current_page invariant as an inequality.
+# •	What happens to state when an invalid read is attempted?
+# •	Why is your beyond-final-page policy part of the method contract?
+
+
+class Book:
+    def __init__(self,title,author,pages):
+
+        if not title.strip():
+            raise ValueError("Title cannot be blank.")
+
+        if not author.strip():
+            raise ValueError("Author cannot be blank.")
+
+        
+        if not isinstance(pages,int):
+            raise ValueError("Pages must be an integer")
+
+        if pages <= 0:
+            raise ValueError("Pages must be positive number.")
+
+
+        self.title = title.strip()
+        self.author = author.strip()
+        self.pages = pages
+
+        self.current_page = 0
+
+
+    def read(self,page_count):
+
+        if not isinstance(page_count,int):
+            raise ValueError("Page count must be an integer.")
+
+        if page_count <= 0:
+            raise ValueError("Page count must be a positive number.")
+
+
+
+
+
+        #Reject the operation beyond book pages.
+
+        if page_count + self.current_page > self.pages:
+            raise ValueError("Total pages exceeded.")
+
+        self.current_page += page_count
+
+
+    def get_progress(self):
+
+        return self.current_page
+
+
+
+book1 = Book("Fountainhead","Ayn Rand",700)
+book2 = Book("The Scam", "Sucheta Dalal", 400)
+book3 = Book("Rich Dad Poor Dad","Robert Kiyosaki",0)
+
+
+book1.read(300)
+book2.read(400)
+
+book2.read(700)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Exercise 4 - Task
+# Goal: model a small stateful domain object with a constrained set of values.
+# •	Class: Task
+# •	Instance state: title, priority, completed
+# •	Methods: mark_complete(), change_priority(new_priority), get_summary()
+# Rules:
+# •	title must not be blank.
+# •	priority must be one of: "low", "medium", "high".
+# •	completed starts as False.
+# •	mark_complete() changes completed to True.
+# •	change_priority(new_priority) validates before mutation.
+# •	get_summary() reports title, priority, and completion state.
+# Minimum tests: valid priorities; unsupported priority at creation; priority change; invalid priority change preserving the old value; completion; two independent tasks.
+# Design questions before coding
+# •	Which attribute has a class-wide allowed-value policy but per-instance state?
+# •	Should mark_complete return anything? State your chosen contract.
+# •	How will you prove an invalid priority change does not partially mutate the object?
+
+
+
+
+
+
+
+
+class Task:
+
+    ALLOWED_PRIORITIES = {"low", "medium", "high"}
+
+    def __init__(self,title,priority):
+
+
+        if not title.strip():
+            raise ValueError("Title cannot be blank.")
+
+        title = title.strip()
+
+        if not priority.strip():
+            raise ValueError("Priority cannot be blank.")
+
+        priority = priority.strip()
+
+        if priority not in self.ALLOWED_PRIORITIES:
+            raise ValueError("Invalid priority value.")
+
+
+        self.title = title
+        self.priority = priority
+
+
+        self.completed = False
+
+
+    def mark_complete(self):
+        self.completed = True
+
+
+    def change_priority(self,new_priority):
+
+        if not new_priority.strip():
+            raise ValueError("new_priority cannot be empty.")
+
+        new_priority = new_priority.strip()
+
+        if new_priority not in self.ALLOWED_PRIORITIES:
+            raise ValueError("Invalid priority value.")
+
+        self.priority = new_priority
+
+    def get_summary(self):
+
+        return f"Title: {self.title} | Priority: {self.priority} | Completed: {self.completed}"
+
+#mark completed need not return anything
+
+task1 = Task("gym","high")
+task2 = Task("college", "low")
+task3 = Task("dance", "medium")
+
+task4 = Task("sing","ultra")
+
+task2.change_priority("medium")
+
+task3.change_priority("super ultra")
+
+task2.mark_complete()
+
+
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Exercise 5 - JobApplication
+# Goal: create the first small model that connects directly to the later Job Tracker CLI project.
+# •	Class: JobApplication
+# •	Instance state: company, role, status
+# •	Methods: change_status(new_status), get_summary()
+# Rules:
+# •	company and role must not be blank.
+# •	status defaults to "applied".
+# •	Allowed statuses: "applied", "interview", "offer", "rejected".
+# •	change_status(new_status) validates before changing status.
+# •	get_summary() returns a clear one-line summary.
+# Minimum tests: default status; explicit valid status; valid transition; invalid status preserving the previous value; blank company; blank role; multiple independent applications.
+# Design questions before coding
+# •	Is the set of allowed statuses instance state or a class-level policy?
+# •	What invariant must status satisfy?
+# •	Which part of this class could later become a dataclass on Day 3, and what behavior would still need explicit methods?
+
+
+class JobApplication:
+
+    ALLOWED_STATUSES = {"applied", "interview", "offer", "rejected"}
+
+    def __init__(self,company,role):
+
+        if not company.strip():
+            raise ValueError("Company cannot be blank.")
+
+        company = company.strip()
+
+        if not role.strip():
+            raise ValueError("Role cannot be blank.")
+
+        role = role.strip()
+
+        self.status = "applied"
+
+        
+        self.company = company
+        self.role = role
+
+        
+
+
+    def change_status(self,new_status):
+
+        if new_status not in self.ALLOWED_STATUSES:
+            raise ValueError("Invalid status")
+
+        self.status = new_status
+
+    def get_summary(self):
+        return f"Company: {self.company}, Role: {self.role}, Status: {self.status}"
+
+
+
+application1 = JobApplication("OpenAI","CEO","offer")
+application2 = JobApplication("Microsoft","CTO")
+
+application1 = JobApplication("","CEO","offer")
+application2 = JobApplication("Microsoft","")
+
+
+application1.change_status("rejected")
+
+application1.change_status("terminated")
+
+
+
+
+
 
 
 
