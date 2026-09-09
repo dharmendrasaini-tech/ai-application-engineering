@@ -420,6 +420,76 @@ print(bmw_car.engine.is_running())
 #VERSION 2
 
 
+
+# 8. End-of-Day Deliverable: Mini OOP Model
+# This is the required Day 2 roadmap deliverable. Build one small Vehicle Service model that demonstrates all Day 2 concepts together. Do not use dataclasses, abstract base classes, advanced dunder methods, decorators, or external libraries.
+# Submission standard
+# Before coding, draw the relationships. After coding, run the verification scenarios. Be able to point to the exact line where inheritance, composition, delegation, overriding, and polymorphism occur.
+
+# 8.1 Required classes
+# Class	Responsibility	Required state / behavior
+# Engine	Own engine running state	engine_type, running; start(), stop(), is_running()
+# Vehicle	Base vehicle behavior and Engine dependency	brand, model, engine; start_vehicle(), stop_vehicle(), get_service_message()
+# Car	Specialized Vehicle	doors; override get_service_message()
+# Motorcycle	Specialized Vehicle	has_sidecar; override get_service_message()
+
+# 8.2 Required relationships
+# •	Car inherits from Vehicle.
+# •	Motorcycle inherits from Vehicle.
+# •	Vehicle receives an Engine object through its constructor and stores it as an instance dependency.
+# •	Vehicle delegates start/stop work to the Engine object.
+# •	Car and Motorcycle override get_service_message().
+# •	A standalone service_vehicle(vehicle) function calls vehicle.get_service_message() without branching on concrete type.
+# 8.3 Required behavior and rules
+# •	Engine.running starts as False.
+# •	Engine.start() changes running to True; Engine.stop() changes it to False.
+# •	Vehicle.start_vehicle() must use the contained Engine rather than duplicate engine state on Vehicle.
+# •	Vehicle.stop_vehicle() must delegate to Engine.stop().
+# •	Vehicle base implementation returns a general service message.
+# •	Car returns a car-specific service message.
+# •	Motorcycle returns a motorcycle-specific service message.
+# •	Subclass constructors must initialize Vehicle state correctly and then add their own state.
+# •	Do not use isinstance() branches inside service_vehicle() to choose the message.
+# 8.4 Suggested object relationship diagram
+# Vehicle  -- has-a -->  Engine
+#    ^
+#    | inheritance (is-a)
+#    +-----------+
+#    |           |
+#   Car     Motorcycle
+
+# service_vehicle(x)
+#         |
+#         +--> calls x.get_service_message() polymorphically
+
+# 8.5 Minimum verification scenarios
+# •	Create one Engine and confirm it starts with running == False.
+# •	Create a Car with that Engine; call start_vehicle(); confirm the same Engine now reports running == True.
+# •	Stop the Car and confirm the Engine reports running == False.
+# •	Create a Motorcycle with a separate Engine and verify its state is independent.
+# •	Confirm Car and Motorcycle both inherit brand/model behavior from Vehicle.
+# •	Confirm each subclass keeps its own additional state (doors / has_sidecar).
+# •	Call service_vehicle(car) and service_vehicle(motorcycle); verify different messages without type branching.
+# •	Call Vehicle.get_service_message() on a plain Vehicle and verify the base implementation.
+# •	Explain exactly why print(car.start_vehicle()) may print None if the underlying start methods only mutate state.
+# 8.6 Design questions before coding
+# •	Why should Engine be composed into Vehicle instead of inherited by Vehicle?
+# •	Why are Car and Motorcycle reasonable Vehicle subclasses?
+# •	Where should engine running state live, and why should Vehicle not duplicate it?
+# •	Which methods demonstrate delegation?
+# •	Which methods demonstrate overriding?
+# •	What behavior contract does service_vehicle() depend on?
+# •	Could an unrelated object participate in service_vehicle() if it provides a compatible get_service_message()? Explain.
+# •	Which future change would composition make easier—for example replacing Engine with another engine implementation?
+# 8.7 Optional stretch - only after the required model works
+# •	Add ElectricEngine with the same start/stop behavior and pass it into Vehicle without changing Vehicle.
+# •	Create a list of different vehicle objects and loop over them, calling service_vehicle() for each.
+# •	Add simple validation for blank brand/model only if it does not distract from the relationship concepts.
+# Do not stretch into Day 3
+# Do not add __repr__, __str__, __eq__, dataclasses, abstract base classes, or elaborate type hierarchies. Day 3 is where dunder methods + dataclasses receive focused attention.
+
+
+
 class Engine:
     def __init__(self,engine_type):
 
