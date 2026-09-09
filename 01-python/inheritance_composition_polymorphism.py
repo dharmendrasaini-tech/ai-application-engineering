@@ -393,3 +393,170 @@ print(bmw_car.engine.is_running())
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#VERSION 2
+
+
+class Engine:
+    def __init__(self,engine_type):
+
+        self.engine_type = engine_type
+        self.running = False
+
+
+
+    def start(self):
+        self.running = True
+
+    def stop(self):
+        self.running = False
+
+    def is_running(self):
+        return self.running
+
+
+
+
+class Vehicle:
+    def __init__(self,brand,model,engine):
+        self.brand = brand
+        self.model = model
+        self.engine = engine
+
+
+    def start_vehicle(self):
+        self.engine.start()
+
+    def stop_vehicle(self):
+        self.engine.stop()
+
+    def get_service_message(self):
+        return "Vehicle serviced."
+
+
+
+class Car(Vehicle):
+    def __init__(self,brand,model,engine,doors):
+
+        super().__init__(brand,model,engine)
+
+        self.doors = doors
+
+
+    def get_service_message(self):
+        return "Car serviced."
+
+
+class MotorCycle(Vehicle):
+    def __init__(self,brand,model,engine,has_sidecar):
+        super().__init__(brand,model,engine)
+
+        self.has_sidecar = has_sidecar
+
+
+    def get_service_message(self):
+        return "MotorCycle serviced."
+    
+
+
+def service_vehicle(vehicle):
+    return vehicle.get_service_message()
+
+   
+#1
+petrol_engine = Engine("petrol")
+
+print(petrol_engine.isrunning())
+
+
+#2
+car = Car("skoda","kylaq",petrol_engine,4)
+
+print(car.start_vehicle())
+
+print(petrol_engine.is_running())
+
+#3
+print(car.stop_vehicle())
+print(petrol_engine.is_running())
+
+#4
+diesel_engine = Engine("diesel")
+
+print(diesel_engine.engine_type)
+print(petrol_engine.engine_type)
+
+#5
+
+motorcycle = MotorCycle("Honda","Shine",diesel_engine,False)
+
+print(car.brand)
+print(car.model)
+print(motorcycle.brand)
+print(motorcycle.model)
+
+#6
+print(car.doors)
+print(motorcycle.has_sidecar)
+
+#7
+
+print(service_vehicle(car))
+print(service_vehicle(motorcycle))
+
+
+#8
+vehicle = Vehicle("Honda","City",diesel_engine)
+print(service_vehicle(vehicle))
+
+#9
+
+# Because python return None for a function which does not return anything.
+
+# 8.6 answers
+
+#1 Because Vehicle has an engine . So the relations is more suited for composition.
+
+#2 Becuase they are vehicles.
+
+#3 Inside the engine, because running is a behaviour of engine not vehicle.
+
+#4 print(car.stop_vehicle())
+# print(petrol_engine.isrunning())
+
+#5 get_service_message(self)
+
+#6 the object passed must provide a callable get_service_message() method.
+
+#7 Yes because python does not care about the type unless it provides the required behaviour through its method
+
+#8 Yes , composition will make it easier to replace the dependency
+
+
+
+
+
+
