@@ -1,20 +1,22 @@
 
 
-def normalize_text(text: str, field_name: str) -> str:
-    normalized_text = text.strip()
+def normalize_text(text: str, field: str) -> str:
+    stripped_text = text.strip()
 
-    if not normalized_text:
-        raise ValueError(f"{field_name} cannot be blank.")
+    if not stripped_text:
+        raise ValueError(f"{field} cannot be blank.")
 
-    return normalized_text
+    return stripped_text
 
 
-def validate_status(status: str, allowed_statuses: set[str]) -> str:
+def validate_status(status: str, allowed_statuses: frozenset[str]) -> str:
+
+
     normalized_status = status.strip().lower()
 
     if normalized_status not in allowed_statuses:
-        raise ValueError("Invalid status.")
+        raise ValueError(f"Invalid status: {normalized_status}")
 
     return normalized_status
 
-
+    
